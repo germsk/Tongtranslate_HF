@@ -1,17 +1,14 @@
-#import functions
+# imports
 from openai import OpenAI
 from docx import Document
 import tempfile
 import os
 import json
-from helper_functions.config import get_secret
 
-#load OpenAI API keys
-OPENAI_API_KEY = get_secret("OPENAI_API_KEY")
-os.environ["OPENAI_API_KEY"] = OPENAI_API_KEY
+# Load API key from HuggingFace environment variables
+OPENAI_API_KEY = os.environ["OPENAI_API_KEY"]
 
-
-#define client
+# define client
 client = OpenAI(api_key=OPENAI_API_KEY)
 
 # function to convert markdown to word document

@@ -15,10 +15,6 @@ from openai_calls.web_browse import web_browse
 from openai_calls.translator import translate_function
 from crewai import Crew, Process
 
-#Load the environment variables
-# If the .env file is not found, the function will return `False
-load_dotenv()
-
 #set gpt model
 os.environ['OPENAI_MODEL_NAME'] = "gpt-4o-mini"
 

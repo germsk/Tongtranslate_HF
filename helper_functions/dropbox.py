@@ -7,7 +7,7 @@ from helper_functions.dropbox_auth import get_fresh_access_token
 
 def get_dbx():
     """Initialize Dropbox client using a fresh access token."""
-    access_token = get_fresh_access_token()   # NEW LINE
+    access_token = get_fresh_access_token()  
     return dropbox.Dropbox(access_token)
 
 

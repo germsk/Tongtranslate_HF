@@ -1,16 +1,13 @@
 #import modules
 from openai import OpenAI
 import json
-from helper_functions.config import get_secret
+import os
 
-#use openai to perform web search
+# Load API key from HuggingFace environment variables
+OPENAI_API_KEY = os.environ["OPENAI_API_KEY"]
 
-# import modules
-from openai import OpenAI
-import json
-
-# Load API key (works locally + Streamlit Cloud)
-OPENAI_API_KEY = get_secret("OPENAI_API_KEY")   
+# Define client
+client = OpenAI(api_key=OPENAI_API_KEY)
 
 # Define client with API key
 client = OpenAI(api_key=OPENAI_API_KEY)          #
