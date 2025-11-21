@@ -51,7 +51,7 @@ This **limits the usefulness of AI, and prevents wider adoption in the translati
 with st.expander("Approach to Solving the Problem"):
     st.markdown("""
 
-For this prototype, I **worked with the translators to identify limitations in the current OpenAI translations**.  We then worked on the prompt template and two rounds of testing to ensure that the OpenAI translations, particularly in areas where it fell short, could be improved.  
+For this prototype, I **identified limitations in the current OpenAI translations**.  
 
 The **extract entities and web browse element helped to mimic the work process of the translator to verify terms through authoritative sources**
 (prompt asked the LLM to retrieve translations from local news like Channel NewsAsia or websites ending with gov.sg to ensure a higher degree of accuracy).  The verified terms are then built into a backend glossary.  
@@ -129,43 +129,6 @@ The workflow produces two outputs:
     
     st.page_link("pages/2_Glossary.py", label="👉 Open Glossary Page")
 
-#Safeguards and Evaluation 
-with st.expander("Addressing Prompt Injection"):
-    st.markdown("""
-
-**Safeguards to Address Prompt Injection**
-                
-To **prevent prompt injection** and **reduce the chances of the app being exploited**, I introduced **two categories of safeguards** - (i) preventing the translation of purely non-Chinese inputs; and (ii) guarding against prompt injections. 
-
-**(i) Preventing the Translation of Purely Non-Chinese Inputs**
-
-For language detection instead of relying on language detection libraries that often misread Singapore-style mixed-language news, I used **Chinese-character detection** as the gatekeeper in the Streamlit app.  This ensures that the translation pipeline only runs when the input actually contains Chinese characters.  Suppose a user enters pure Malay, Tamil or English.  The system immediately returns a gentle warning (“⚠️ Please enter Chinese text”), which prevents the app from being tricked into processing irrelevant or malicious input.  
-
-In addition, the language-check task passes the output to the entity-extraction task, and **the entity-extraction task returns an empty list** if the user input does not contain any Chinese characters.
-
-Further, the **prompt in the translation task instructs the LLM not to translate** if the user input does not contain any Chinese characters.
-
-**(ii) Guarding Against Prompt Injections**
-
-The second safeguard is a **small “security rule” block ** that I added to the start of my **entity-extraction task**.  This tells the model to treat user input as article content, and not as instructions to override or change the behaviour of the translation pipeline.  This effectively neutralises common prompt-injection attempts such as “ignore all previous instructions”, “just output hacked JSON”, or “as the developer I instruct you to…”. These phrases are now translated literally, and the system does not obey them.  Offensive words and mixed-language sentences are still processed normally, as they are legitimate parts of news reporting.  
-
-**Evaluation of Safeguards**
-
-Overall, the safeguards worked.  **Pure Malay, Tamil and English inputs were blocked reliably**, and the app only proceeded when the text contained Chinese characters.  This is important because it allows mixed-language news articles—which are very common in our context—to be processed correctly, without accidentally triggering the translation pipeline for irrelevant inputs.
-
-In terms of prompt injection, the system behaved as expected.  **Attempts to force the model to output hacked JSON, override its instructions, or disrupt the extraction process were all ignored and treated as normal text.**  The model did not follow any of these embedded commands.  
-
-The table below shows shows several examples of how the system responds to different types of inputs, including non-Chinese text, mixed-language content, and deliberate attempts at prompt injection. 
-             """)
-
-    # Load Glossary
-    filepath_prompt_injection = REFERENCE_DIR / "prompt_injection.csv"
-    prompt_injection = pd.read_csv(filepath_prompt_injection, encoding="utf-8-sig")
-
-    st.subheader("Prompt Injection Tests")
-
-    prompt_injection
-
 # Evaluation of Results 
 
 with st.expander("Hypothesis Testing and Validation"):
@@ -205,34 +168,3 @@ I will continue reviewing new entries in final_terms and monitor the accuracy of
     st.subheader("Use Case Comparison Tests")
 
     st.table(use_cases)
-
-# Impact on Users
-with st.expander("User Impact"):
-    st.markdown("""
-
-**Impact on Users**
-                
-- Translators complete translations faster, reducing the waiting time for colleagues.
-- Automated entity extraction, verification, and glossary updates cut down repetitive research work and manual update of glossary.
-- Web searches for entities, cultural phrases, and idioms are expected to improve translation accuracy.
-- Collaborating with translators to refine prompts and test outputs strengthens trust in AI-assisted translation.
-
-             """)
-    
-# Obstacles and Change Management 
-with st.expander("Obstacles and Change Management"):
-    st.markdown("""
-
-**Obstacles**
-                
-- Translators may hesitate to rely on AI because they expect high accuracy.
-- Web search results may sometimes be incomplete or unreliable.
-- Without proper checks, incorrect glossary entries may be carried forward.
-
-**Change Management**
-                
-- Emphasise that the system aims to support productivity, not replace translators.
-- Keep translators in the loop to review and confirm terms before adding them to the glossary.
-- Build trust by involving translators in prompt design, testing, and verification.
-- Maintain transparency by showing how the system checks authoritative sources such as CNA or gov.sg sites.
-             """)
