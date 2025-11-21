@@ -1,19 +1,10 @@
-# Streamlit App
-streamlit>=1.41.0
-
-# Core Libraries 
-openai==2.7.2
+streamlit==1.36.0
+openai==1.39.0
 pandas==2.3.3
-pydantic==2.12.4
 requests==2.32.5
-
-# Document Output 
-python-docx==1.2.0
-
-# CrewAI (SAFE VERSIONS, no pywin32) -
-# compatiable with Python 3.7 through 3.12
-crewai>=0.95.0
-crewai-tools>=0.25.8
-
+python-docx==1.1.0
+crewai==0.30.11
 langdetect==1.0.9
-dropbox==11.36.2
+python-dotenv==1.0.1
+aiohttp==3.9.5
+pydantic==2.7.4
